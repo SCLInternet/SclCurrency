@@ -68,24 +68,6 @@ class CurrencyValueSpec extends ObjectBehavior
         $this->setValue(69.1);
     }
 
-    /*
-    public function it_creates_with_factory_method()
-    {
-        $this::createFromValue(5)
-             ->shouldReturnAnInstanceOf('SCL\Currency\CurrencyValue');
-    }
-
-    public function it_sets_value_when_created_by_factory_method()
-    {
-        $cv = $this::createFromValue(77.50)->getValue()->shouldReturn(77.50);
-    }
-
-    public function it_sets_precision_via_factory_method()
-    {
-        $this::createFromValue(1.234, 3)->getValue()->shouldReturn(1.234);
-    }
-    */
-
     public function it_converts_to_formatted_string()
     {
         $this->setValue(2.15);

@@ -33,23 +33,6 @@ class CurrencyValue
     }
 
     /**
-     * @param  float $value
-     * @param  int   $precision
-     *
-     * @return CurrencyValue
-     */
-    /*
-    public static function createFromValue($value, $precision = 2)
-    {
-        $cv = new self($precision);
-
-        $cv->setValue($value);
-
-        return $cv;
-    }
-    */
-
-    /**
      * @return float
      */
     public function getValue()
@@ -98,6 +81,8 @@ class CurrencyValue
      */
     private function stripPrecision($value)
     {
+        // round is required as simply casting to int caused floating
+        // point problems with certain values (such as 69.1)
         return intval(round($value * pow(10, $this->precision)));
     }
 
