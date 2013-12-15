@@ -25,11 +25,9 @@ class CurrencyCalculator
      */
     public function add(CurrencyValue $a, CurrencyValue $b)
     {
-        return $this->performOperationOnIntegerValues(
-            $a,
-            $b,
-            function ($a, $b) { return $a + $b; }
-        );
+        return $this->performOperationOnIntegerValues($a, $b, function ($a, $b) {
+            return $a + $b;
+        });
     }
 
     /**
@@ -39,11 +37,9 @@ class CurrencyCalculator
      */
     public function subtract(CurrencyValue $a, CurrencyValue $b)
     {
-        return $this->performOperationOnIntegerValues(
-            $a,
-            $b,
-            function ($a, $b) { return $a - $b; }
-        );
+        return $this->performOperationOnIntegerValues($a, $b, function ($a, $b) {
+            return $a - $b;
+        });
     }
 
     /**
