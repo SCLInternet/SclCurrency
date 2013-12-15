@@ -19,6 +19,13 @@ class CurrencyValueSpec extends ObjectBehavior
         $this->getValue()->shouldReturn(0.0);
     }
 
+    public function it_set_value_via_constructor()
+    {
+        $this->beConstructedWith(22);
+
+        $this->getValue()->shouldReturn(22.0);
+    }
+
     public function it_returns_set_value()
     {
         $this->setValue(24.75);
@@ -28,7 +35,7 @@ class CurrencyValueSpec extends ObjectBehavior
 
     public function it_throws_if_doesnt_match_precision()
     {
-        $this->beConstructedWith(2);
+        $this->beConstructedWith(0, 2);
 
         $this->shouldThrow(new IncorrectPrecisionException())
              ->duringSetValue(2.342);
@@ -36,7 +43,7 @@ class CurrencyValueSpec extends ObjectBehavior
 
     public function it_works_with_other_precisions()
     {
-        $this->beConstructedWith(3);
+        $this->beConstructedWith(0, 3);
 
         $this->setValue(1.234);
 
@@ -46,7 +53,7 @@ class CurrencyValueSpec extends ObjectBehavior
     public function it_throws_if_precision_is_negative()
     {
         $this->shouldThrow(new NegativePrecisionException())
-             ->during('__construct', array(-1));
+             ->during('__construct', array(0, -1));
     }
 
     public function it_can_handle_amount_of_one_point_one()
@@ -61,6 +68,7 @@ class CurrencyValueSpec extends ObjectBehavior
         $this->setValue(69.1);
     }
 
+    /*
     public function it_creates_with_factory_method()
     {
         $this::createFromValue(5)
@@ -76,6 +84,7 @@ class CurrencyValueSpec extends ObjectBehavior
     {
         $this::createFromValue(1.234, 3)->getValue()->shouldReturn(1.234);
     }
+    */
 
     public function it_converts_to_formatted_string()
     {

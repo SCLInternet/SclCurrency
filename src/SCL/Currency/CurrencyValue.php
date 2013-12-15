@@ -18,15 +18,18 @@ class CurrencyValue
     protected $value = 0;
 
     /**
-     * @param  int $precision
+     * @param float $value
+     * @param int   $precision
      */
-    public function __construct($precision = 2)
+    public function __construct($value = 0.0, $precision = 2)
     {
         if (0 > $precision) {
             throw new NegativePrecisionException();
         }
 
         $this->precision = (int) $precision;
+
+        $this->setValue($value);
     }
 
     /**
@@ -35,6 +38,7 @@ class CurrencyValue
      *
      * @return CurrencyValue
      */
+    /*
     public static function createFromValue($value, $precision = 2)
     {
         $cv = new self($precision);
@@ -43,6 +47,7 @@ class CurrencyValue
 
         return $cv;
     }
+    */
 
     /**
      * @return float

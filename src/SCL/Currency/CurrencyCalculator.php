@@ -6,7 +6,7 @@ use SCL\Currency\CurrencyValue;
 use SCL\Currency\Exception\PrecisionMismatchException;
 use SCL\Currency\RawCurrencyValue;
 
-class CurrencyArithmetic
+class CurrencyCalculator
 {
     /**
      * @var RawCurrencyValue
