@@ -2,20 +2,19 @@
 
 namespace SCL\Currency;
 
-use SCL\Currency\CurrencyValue;
-use SCL\Currency\RawCurrencyValue;
+use SCL\Currency\Money;
 use SCL\Currency\TaxRate;
 
 class TaxCalculator
 {
     /**
-     * @return CurrencyValue
+     * @return Money
      */
-    public function calculateTaxAmount(CurrencyValue $amount, TaxRate $taxRate)
+    public function calculateTaxAmount(Money $amount, TaxRate $rate)
     {
         return $this->applyCalculationWithValueAndRate(
             $amount,
-            $taxRate,
+            $rate,
             function ($amount, $rate) {
                 // @todo Find out what rounding function is required
                 return $amount * ($rate / 100);
@@ -24,13 +23,13 @@ class TaxCalculator
     }
 
     /**
-     * @return CurrencyValue
+     * @return Money
      */
-    public function extractAmount(CurrencyValue $amountIncTax, TaxRate $taxRate)
+    public function extractAmount(Money $amountIncTax, TaxRate $rate)
     {
         return $this->applyCalculationWithValueAndRate(
             $amountIncTax,
-            $taxRate,
+            $rate,
             function ($amount, $rate) {
                 // @todo Find out what rounding function is required
                 return ($amount / (100 + $rate)) * 100;
@@ -39,13 +38,13 @@ class TaxCalculator
     }
 
     /**
-     * @return CurrencyValue
+     * @return Money
      */
-    public function extractTaxAmount(CurrencyValue $amountIncTax, TaxRate $taxRate)
+    public function extractTaxAmount(Money $amountIncTax, TaxRate $rate)
     {
         return $this->applyCalculationWithValueAndRate(
             $amountIncTax,
-            $taxRate,
+            $rate,
             function ($amount, $rate) {
                 // @todo Find out what rounding function is required
                 return ($amount / (100 + $rate)) * $rate;
@@ -56,38 +55,22 @@ class TaxCalculator
     /**
      * @return float
      */
-    public function calculateTaxRate(CurrencyValue $amount, CurrencyValue $taxAmount)
+    public function calculateTaxRate(Money $amount, Money $taxAmount)
     {
-        return $taxAmount->getValue() / ($amount->getValue() / 100);
+        return new TaxRate($taxAmount->getValue() / ($amount->getValue() / 100));
     }
 
     /**
      * @param callable $calculation Signature: int function(int $value, float $rate)
      */
     private function applyCalculationWithValueAndRate(
-        CurrencyValue $value,
+        Money $value,
         TaxRate $rate,
         $calculation
     ) {
-        $rawValue = new RawCurrencyValue($value);
-        $result   = new CurrencyValue(0, $rawValue->getPrecision());
-
-        $this->setRawCurrencyValue(
-            $result,
-            $calculation($rawValue->getRawValue(), $rate->getPercentage())
+        return new Money(
+            intval(round($calculation($value->getValue(), $rate->getPercentage()))),
+            $value->getCurrency()
         );
-
-        return $result;
-    }
-
-    /**
-     * @param CurrencyValue $value
-     * @param int           $amount
-     */
-    private function setRawCurrencyValue(CurrencyValue $currencyValue, $rawValue)
-    {
-        $raw = new RawCurrencyValue($currencyValue);
-
-        $raw->setRawValue($rawValue);
     }
 }

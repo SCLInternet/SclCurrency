@@ -14,7 +14,7 @@ class TaxRate
      */
     public function __construct($percentage)
     {
-        $this->percentage = $percentage;
+        $this->percentage = (float) $percentage;
     }
 
     /**

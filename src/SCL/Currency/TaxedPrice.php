@@ -2,40 +2,39 @@
 
 namespace SCL\Currency;
 
+use SCL\Currency\Exception\CurrencyMismatchException;
+
 class TaxedPrice
 {
     /**
-     * @var CurrencyValue
+     * @var Money
      */
     private $amount;
 
     /**
-     * @var CurrencyValue
+     * @var Money
      */
     private $tax;
 
-    public function __construct()
+    /**
+     * @throws CurrencyMismatchException
+     */
+    public function __construct(Money $amount, Money $tax)
     {
-        $this->amount = new CurrencyValue(0);
-        $this->tax    = new CurrencyValue(0);
-    }
+        if (!$amount->isSameCurrency($tax->getCurrency())) {
+            throw new CurrencyMismatchException();
+        }
 
-    public function setAmount(CurrencyValue $amount)
-    {
         $this->amount = $amount;
+        $this->tax    = $tax;
     }
 
     /**
-     * @return CurrencyValue
+     * @return Money
      */
     public function getAmount()
     {
         return $this->amount;
-    }
-
-    public function setTax(CurrencyValue $tax)
-    {
-        $this->tax = $tax;
     }
 
     public function getTax()
@@ -45,7 +44,6 @@ class TaxedPrice
 
     public function getTotal()
     {
-
         return $this->getCalculator()->add($this->amount, $this->tax);
     }
 
@@ -54,7 +52,7 @@ class TaxedPrice
         static $calc;
 
         if (null === $calc) {
-            $calc = new CurrencyCalculator();
+            $calc = new MoneyCalculator();
         }
 
         return $calc;

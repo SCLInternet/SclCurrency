@@ -5,15 +5,51 @@ namespace spec\SCL\Currency;
 use PhpSpec\ObjectBehavior; use Prophecy\Argument;
 use SCL\Currency\Exception\IncorrectPrecisionException;
 use SCL\Currency\Exception\NegativePrecisionException;
-use SCL\Currency\CurrencyValue;
+use SCL\Currency\Currency;
+use SCL\Currency\Money;
 
-class CurrencyValueSpec extends ObjectBehavior
+class MoneySpec extends ObjectBehavior
 {
-    public function it_is_initializable()
+    private $currency;
+
+    private $value;
+
+    public function let()
     {
-        $this->shouldHaveType('SCL\Currency\CurrencyValue');
+        $this->currency = new Currency('GBP');
+
+        $this->value = 1199;
+
+        $this->beConstructedWith($this->value, $this->currency);
     }
 
+    public function it_returns_currency()
+    {
+        $this->getCurrency()->shouldReturn($this->currency);
+    }
+
+    public function it_returns_value()
+    {
+        $this->getValue()->shouldReturn($this->value);
+    }
+
+    public function it_throws_when_constructed_with_floating_point_value()
+    {
+        $this->shouldThrow(new \InvalidArgumentException())
+             ->during('__construct', array(10.1, $this->currency));
+    }
+
+    public function it_returns_true_from_isSameCurrency_for_same_currencies()
+    {
+        $this->shouldBeSameCurrency($this->currency);
+    }
+
+    public function it_returns_false_from_isSameCurrency_for_different_currencies()
+    {
+        $this->shouldNotBeSameCurrency(new Currency('USD'));
+    }
+
+    /*
     public function it_initializes_with_zero_value()
     {
         $this->getValue()->shouldReturn(0.0);
@@ -74,4 +110,5 @@ class CurrencyValueSpec extends ObjectBehavior
 
         $this->__toString()->shouldReturn('2.15');
     }
+    */
 }
