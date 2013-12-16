@@ -96,9 +96,9 @@ class ConfigMoneyFactory implements MoneyFactory
      */
     private function getCurrencyUnits()
     {
-        $precision = $this->getCurrencyConfig($this->currencyCode)['precision'];
+        $config = $this->getCurrencyConfig();
 
-        return intval($this->amount * pow(10, $precision));
+        return intval($this->amount * pow(10, $config['precision']));
     }
 
     /**
@@ -108,13 +108,13 @@ class ConfigMoneyFactory implements MoneyFactory
      *
      * @throws UnknownCurrencyException
      */
-    private function getCurrencyConfig($code)
+    private function getCurrencyConfig()
     {
-        if (!array_key_exists($code, $this->config)) {
-            throw new UnknownCurrencyException($code);
+        if (!array_key_exists($this->currencyCode, $this->config)) {
+            throw new UnknownCurrencyException($this->currencyCode);
         }
 
-        return $this->config[$code];
+        return $this->config[$this->currencyCode];
     }
 
     /**
