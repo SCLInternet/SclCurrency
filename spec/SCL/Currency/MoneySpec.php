@@ -3,8 +3,6 @@
 namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior; use Prophecy\Argument;
-use SCL\Currency\Exception\IncorrectPrecisionException;
-use SCL\Currency\Exception\NegativePrecisionException;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
 

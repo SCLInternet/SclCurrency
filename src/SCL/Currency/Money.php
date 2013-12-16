@@ -2,9 +2,6 @@
 
 namespace SCL\Currency;
 
-use SCL\Currency\Exception\IncorrectPrecisionException;
-use SCL\Currency\Exception\NegativePrecisionException;
-
 class Money
 {
     /**
