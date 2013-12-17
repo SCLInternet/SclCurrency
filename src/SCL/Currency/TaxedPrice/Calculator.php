@@ -1,11 +1,11 @@
 <?php
 
-namespace SCL\Currency;
+namespace SCL\Currency\TaxedPrice;
 
 use SCL\Currency\Money;
 use SCL\Currency\TaxRate;
 
-class TaxCalculator
+class Calculator
 {
     /**
      * @return Money

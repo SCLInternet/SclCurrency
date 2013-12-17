@@ -1,15 +1,14 @@
 <?php
 
-namespace spec\SCL\Currency\Factory\Adapter;
+namespace spec\SCL\Currency\TaxedPrice;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
-use SCL\Currency\Exception\CurrencyMismatchException;
-use SCL\Currency\Factory\MoneyFactory;
+use SCL\Currency\Money\Factory as MoneyFactory;
 
-class DefaultTaxedPriceFactorySpec extends ObjectBehavior
+class DefaultFactorySpec extends ObjectBehavior
 {
     private $moneyFactory;
 
@@ -22,7 +21,7 @@ class DefaultTaxedPriceFactorySpec extends ObjectBehavior
 
     public function it_is_a_taxed_price_factory()
     {
-        $this->shouldBeAnInstanceOf('SCL\Currency\Factory\TaxedPriceFactory');
+        $this->shouldBeAnInstanceOf('SCL\Currency\TaxedPrice\Factory');
     }
 
     /*
@@ -153,8 +152,8 @@ class DefaultTaxedPriceFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param  int    $amount
-     * @param  string $currency
+     * @param int    $amount
+     * @param string $currency
      *
      * @return Money
      */

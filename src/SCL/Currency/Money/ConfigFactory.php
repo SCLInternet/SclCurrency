@@ -1,14 +1,13 @@
 <?php
 
-namespace SCL\Currency\Factory\Adapter;
+namespace SCL\Currency\Money;
 
 use SCL\Currency\Money;
 use SCL\Currency\Currency;
 use SCL\Currency\Exception\UnknownCurrencyException;
-use SCL\Currency\Factory\MoneyFactory;
 use SCL\Currency\Exception\NoDefaultCurrencyException;
 
-class ConfigMoneyFactory implements MoneyFactory
+class ConfigFactory implements Factory
 {
     /**
      * @var array
@@ -102,7 +101,7 @@ class ConfigMoneyFactory implements MoneyFactory
     }
 
     /**
-     * @param  string $code
+     * @param string $code
      *
      * @return code
      *
@@ -118,7 +117,7 @@ class ConfigMoneyFactory implements MoneyFactory
     }
 
     /**
-     * @param  string $code
+     * @param string $code
      *
      * @return Currency
      */

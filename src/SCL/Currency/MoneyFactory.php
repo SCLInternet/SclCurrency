@@ -2,13 +2,13 @@
 
 namespace SCL\Currency;
 
-use SCL\Currency\Factory\MoneyFactory as MoneyFactoryInterface;
-use SCL\Currency\Factory\Adapter\ConfigMoneyFactory;
+use SCL\Currency\Money\Factory as Factory;
+use SCL\Currency\Money\ConfigFactory;
 
 class MoneyFactory
 {
     /**
-     * @var MoneyFactoryInterface
+     * @var Factory
      */
     private $moneyFactory;
 
@@ -17,13 +17,13 @@ class MoneyFactory
      */
     private static $staticFactory;
 
-    public function __construct(MoneyFactoryInterface $moneyFactory)
+    public function __construct(Factory $moneyFactory)
     {
         $this->moneyFactory = $moneyFactory;
     }
 
     /**
-     * @return MoneyFactoryInterface
+     * @return Factory
      */
     public function getInternalFactory()
     {
@@ -31,8 +31,8 @@ class MoneyFactory
     }
 
     /**
-     * @param  float                 $amount
-     * @param  string|Currency|null  $currency
+     * @param float                $amount
+     * @param string|Currency|null $currency
      *
      * @return \SCL\Currency\Money
      */
@@ -60,7 +60,7 @@ class MoneyFactory
     public static function createDefaultInstance()
     {
         return new self(
-            new ConfigMoneyFactory(
+            new ConfigFactory(
                 include __DIR__ . '/../../../config/currencies.php'
             )
         );
@@ -90,8 +90,8 @@ class MoneyFactory
     }
 
     /**
-     * @param  float                 $amount
-     * @param  string|Currency|null  $currency
+     * @param float                $amount
+     * @param string|Currency|null $currency
      *
      * @return \SCL\Currency\Money
      */

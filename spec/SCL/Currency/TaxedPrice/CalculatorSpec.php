@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\SCL\Currency;
+namespace spec\SCL\Currency\TaxedPrice;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -8,7 +8,7 @@ use SCL\Currency\Money;
 use SCL\Currency\TaxRate;
 use SCL\Currency\Currency;
 
-class TaxCalculatorSpec extends ObjectBehavior
+class CalculatorSpec extends ObjectBehavior
 {
     public function it_calculates_tax_from_amount_and_rate()
     {
@@ -67,7 +67,7 @@ class TaxCalculatorSpec extends ObjectBehavior
     }
 
     /**
-     * @param  int   $amount
+     * @param int $amount
      *
      * @return Money
      */

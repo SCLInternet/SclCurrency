@@ -1,13 +1,12 @@
 <?php
 
-namespace SCL\Currency\Factory\Adapter;
+namespace SCL\Currency\TaxedPrice;
 
 use SCL\Currency\Money;
 use SCL\Currency\TaxedPrice;
-use SCL\Currency\Factory\TaxedPriceFactory;
-use SCL\Currency\Factory\MoneyFactory;
+use SCL\Currency\Money\Factory as MoneyFactory;
 
-class DefaultTaxedPriceFactory implements TaxedPriceFactory
+class DefaultFactory implements Factory
 {
     /**
      * @var MoneyFactory

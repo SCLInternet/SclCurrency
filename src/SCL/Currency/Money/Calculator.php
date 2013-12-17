@@ -1,11 +1,11 @@
 <?php
 
-namespace SCL\Currency;
+namespace SCL\Currency\Money;
 
 use SCL\Currency\Money;
 use SCL\Currency\Exception\CurrencyMismatchException;
 
-class MoneyCalculator
+class Calculator
 {
     /**
      * @var Money
@@ -48,7 +48,7 @@ class MoneyCalculator
     }
 
     /**
-     * @param  callable $operation Signature: int function(int $a, int $b)
+     * @param callable $operation Signature: int function(int $a, int $b)
      *
      * @return Money
      */

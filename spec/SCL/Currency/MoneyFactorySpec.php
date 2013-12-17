@@ -4,12 +4,9 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use SCL\Currency\Factory\MoneyFactory as MoneyFactoryInterface;
+use SCL\Currency\Money\Factory;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
-use SCL\Currency\Factory;
-use SCL\Currency\Factory\TaxedPriceFactory;
-use SCL\Currency\TaxedPrice;
 use SCL\Currency\MoneyFactory;
 
 class MoneyFactorySpec extends ObjectBehavior
@@ -21,7 +18,7 @@ class MoneyFactorySpec extends ObjectBehavior
         $this::clearStaticFactory();
     }
 
-    public function let(MoneyFactoryInterface $moneyFactory)
+    public function let(Factory $moneyFactory)
     {
         $this->moneyFactory = $moneyFactory;
 

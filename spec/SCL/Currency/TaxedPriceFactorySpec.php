@@ -4,10 +4,9 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use SCL\Currency\Factory\MoneyFactory;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
-use SCL\Currency\Factory\TaxedPriceFactory as TaxedPriceFactoryInterface;
+use SCL\Currency\TaxedPrice\Factory;
 use SCL\Currency\TaxedPrice;
 use SCL\Currency\TaxedPriceFactory;
 
@@ -20,7 +19,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this::clearStaticFactory();
     }
 
-    public function let(TaxedPriceFactoryInterface $priceFactory)
+    public function let(Factory $priceFactory)
     {
         $this->priceFactory = $priceFactory;
 
@@ -165,7 +164,6 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     {
         $this::getStaticFactory()->shouldReturnAnInstanceOf('SCL\Currency\TaxedPriceFactory');
     }
-
 
     private function createMockMoney($amount = 0)
     {

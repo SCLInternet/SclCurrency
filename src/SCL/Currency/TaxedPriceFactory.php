@@ -2,14 +2,13 @@
 
 namespace SCL\Currency;
 
-use SCL\Currency\Factory\Adapter\ConfigMoneyFactory;
-use SCL\Currency\Factory\TaxedPriceFactory as TaxedPriceFactoryInterface;
-use SCL\Currency\Factory\Adapter\DefaultTaxedPriceFactory;
+use SCL\Currency\TaxedPrice\Factory;
+use SCL\Currency\TaxedPrice\DefaultFactory;
 
 class TaxedPriceFactory
 {
     /**
-     * @var TaxedPriceFactoryInterface
+     * @var Factory
      */
     private $priceFactory;
 
@@ -18,15 +17,15 @@ class TaxedPriceFactory
      */
     private static $staticFactory;
 
-    public function __construct(TaxedPriceFactoryInterface $priceFactory)
+    public function __construct(Factory $priceFactory)
     {
         $this->priceFactory = $priceFactory;
     }
 
     /**
-     * @param  Money|float $amount
-     * @param  Money|float $tax
-     * @param  string      $currency
+     * @param Money|float $amount
+     * @param Money|float $tax
+     * @param string      $currency
      *
      * @return TaxedPrice
      */
@@ -48,7 +47,7 @@ class TaxedPriceFactory
      */
     public static function createDefaultInstance()
     {
-        return new self(new DefaultTaxedPriceFactory(
+        return new self(new DefaultFactory(
             MoneyFactory::getStaticFactory()->getInternalFactory()
         ));
     }
@@ -79,9 +78,9 @@ class TaxedPriceFactory
     /**
      * staticCreateTaxedPrice
      *
-     * @param  Money|float $amount
-     * @param  Money|float $tax
-     * @param  string      $currency
+     * @param Money|float $amount
+     * @param Money|float $tax
+     * @param string      $currency
      *
      * @return TaxedPrice
      */

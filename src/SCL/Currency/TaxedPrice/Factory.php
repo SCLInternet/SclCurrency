@@ -1,11 +1,11 @@
 <?php
 
-namespace SCL\Currency\Factory;
+namespace SCL\Currency\TaxedPrice;
 
 use SCL\Currency\Money;
 use SCL\Currency\TaxedPrice;
 
-interface TaxedPriceFactory
+interface Factory
 {
     /**
      * @return TaxedPrice
@@ -13,17 +13,17 @@ interface TaxedPriceFactory
     public function createWithObjects(Money $amount, Money $tax);
 
     /**
-     * @param  float  $amount
-     * @param  float  $tax
-     * @param  string $currency
+     * @param float  $amount
+     * @param float  $tax
+     * @param string $currency
      *
      * @return TaxedPrice
      */
     public function createWithValues($amount, $tax, $currency);
 
     /**
-     * @param  float  $amount
-     * @param  float  $tax
+     * @param float $amount
+     * @param float $tax
      *
      * @return TaxedPrice
      */
