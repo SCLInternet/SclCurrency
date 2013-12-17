@@ -9,30 +9,54 @@ Basic usage
 -----------
 
 ```php
-use SCL\Currency\Factory;
-use SCL\Currency\Currency;
+use SCL\Currency\MoneyFactory;
 
-$factory = Factory::createDefaultInstance();
+$factory = MoneyFactory::createDefaultInstance();
 
 $money = $factory->create(10.99, 'GBP');
 ```
 
 ```php
-use SCL\Currency\Factory;
+use SCL\Currency\MoneyFactory;
 use SCL\Currency\Currency;
 
-$factory = Factory::createDefaultInstance();
+$factory = MoneyFactory::createDefaultInstance();
 
 $money = $factory->create(10.99, new Currency('GBP'));
 ```
 
 ```php
-use SCL\Currency\Factory;
+use SCL\Currency\MoneyFactory;
 use SCL\Currency\Currency;
 
-$factory = Factory::createDefaultInstance();
+$factory = MoneyFactory::createDefaultInstance();
 
 $factory->setDefaultCurrency(new Currency('GBP'));
 
 $money = $factory->create(10.99);
+```
+
+Static
+------
+
+```php
+use SCL\Currency\MoneyFactory;
+
+$money = MoneyFactory::staticCreate(10.99, 'GBP');
+```
+
+```php
+use SCL\Currency\MoneyFactory;
+use SCL\Currency\Currency;
+
+$money = MoneyFactory::staticCreate(10.99, new Currency('GBP'));
+```
+
+```php
+use SCL\Currency\MoneyFactory;
+use SCL\Currency\Currency;
+
+MoneyFactory::getStaticFactory()->setDefaultCurrency(new Currency('GBP'));
+
+$money = MoneyFactory::staticCreate(10.99);
 ```
