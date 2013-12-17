@@ -3,6 +3,7 @@
 namespace SCL\Currency;
 
 use SCL\Currency\Exception\CurrencyMismatchException;
+use SCL\Currency\Money\Calculator as MoneyCalculator;
 
 class TaxedPrice
 {

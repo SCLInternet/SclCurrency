@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\SCL\Currency;
+namespace spec\SCL\Currency\Money;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -8,7 +8,7 @@ use SCL\Currency\Money;
 use SCL\Currency\Exception\CurrencyMismatchException;
 use SCL\Currency\Currency;
 
-class MoneyCalculatorSpec extends ObjectBehavior
+class CalculatorSpec extends ObjectBehavior
 {
     private $currency;
 

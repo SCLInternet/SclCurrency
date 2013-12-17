@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\SCL\Currency\Factory\Adapter;
+namespace spec\SCL\Currency\Money;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -8,7 +8,7 @@ use SCL\Currency\Exception\UnknownCurrencyException;
 use SCL\Currency\Currency;
 use SCL\Currency\Exception\NoDefaultCurrencyException;
 
-class ConfigMoneyFactorySpec extends ObjectBehavior
+class ConfigFactorySpec extends ObjectBehavior
 {
     public function let()
     {
@@ -36,7 +36,7 @@ class ConfigMoneyFactorySpec extends ObjectBehavior
 
     public function it_is_a_MoneyFactory()
     {
-        $this->shouldBeAnInstanceOf('SCL\Currency\Factory\MoneyFactory');
+        $this->shouldBeAnInstanceOf('SCL\Currency\Money\Factory');
     }
 
     /*

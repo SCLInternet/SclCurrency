@@ -4,7 +4,6 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior; use Prophecy\Argument;
 use SCL\Currency\Currency;
-use SCL\Currency\Money;
 
 class MoneySpec extends ObjectBehavior
 {
