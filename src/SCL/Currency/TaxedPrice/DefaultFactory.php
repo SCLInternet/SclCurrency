@@ -27,7 +27,6 @@ class DefaultFactory implements Factory
     {
         return new TaxedPrice(
             $this->moneyFactory->createWithCurrencyCode($amount, $currency),
-
             $this->moneyFactory->createWithCurrencyCode($tax, $currency)
         );
     }
