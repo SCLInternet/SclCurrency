@@ -7,9 +7,9 @@ use Prophecy\Argument;
 use SCL\Currency\Factory\MoneyFactory;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
-use SCL\Currency\Factory;
 use SCL\Currency\Factory\TaxedPriceFactory as TaxedPriceFactoryInterface;
 use SCL\Currency\TaxedPrice;
+use SCL\Currency\TaxedPriceFactory;
 
 class TaxedPriceFactorySpec extends ObjectBehavior
 {
@@ -130,7 +130,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
      * static methods
      */
 
-    public function it_proxies_static_create_price_calls_to_an_instance_of_factory(Factory $factory)
+    public function it_proxies_static_create_price_calls_to_an_instance_of_factory(TaxedPriceFactory $factory)
     {
         $this::setStaticFactory($factory);
 
@@ -139,7 +139,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this::staticCreateTaxedPrice(10, 2, 'GBP');
     }
 
-    public function it_returns_statically_created_price(Factory $factory, TaxedPrice $price)
+    public function it_returns_statically_created_price(TaxedPriceFactory $factory, TaxedPrice $price)
     {
         $this::setStaticFactory($factory);
 
@@ -148,7 +148,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this::staticCreateTaxedPrice(0, 0, 'GBP')->shouldReturn($price);
     }
 
-    public function it_returns_static_factory(Factory $factory)
+    public function it_returns_static_factory(TaxedPriceFactory $factory)
     {
         $this::setStaticFactory($factory);
 

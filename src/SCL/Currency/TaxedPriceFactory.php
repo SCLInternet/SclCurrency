@@ -53,7 +53,7 @@ class TaxedPriceFactory
         ));
     }
 
-    public static function setStaticFactory(Factory $factory)
+    public static function setStaticFactory(TaxedPriceFactory $factory)
     {
         self::$staticFactory = $factory;
     }
