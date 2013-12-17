@@ -8,13 +8,11 @@ use SCL\Currency\Factory\MoneyFactory;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
 use SCL\Currency\Factory;
-use SCL\Currency\Factory\TaxedPriceFactory;
+use SCL\Currency\Factory\TaxedPriceFactory as TaxedPriceFactoryInterface;
 use SCL\Currency\TaxedPrice;
 
-class FactorySpec extends ObjectBehavior
+class TaxedPriceFactorySpec extends ObjectBehavior
 {
-    private $moneyFactory;
-
     private $priceFactory;
 
     public function letgo()
@@ -22,100 +20,11 @@ class FactorySpec extends ObjectBehavior
         $this::clearStaticFactory();
     }
 
-    public function let(MoneyFactory $moneyFactory, TaxedPriceFactory $priceFactory)
+    public function let(TaxedPriceFactoryInterface $priceFactory)
     {
-        $this->moneyFactory = $moneyFactory;
-
         $this->priceFactory = $priceFactory;
 
-        $this->beConstructedWith($this->moneyFactory, $this->priceFactory);
-    }
-
-    /*
-     * createMoney()
-     */
-
-    public function it_creates_money_using_given_currency()
-    {
-        $currency = new Currency('GBP');
-        $amount   = 55.50;
-
-        $this->moneyFactory
-             ->createWithCurrency($amount, $currency)
-             ->shouldBeCalled();
-
-        $this->createMoney($amount, $currency);
-    }
-
-    public function it_returns_created_money_from_given_currency()
-    {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithCurrency(Argument::any(), Argument::any())
-             ->willReturn($money);
-
-        $this->createMoney(0, new Currency('GBP'))->shouldReturn($money);
-    }
-
-    public function it_creates_money_using_currency_code()
-    {
-        $currency = 'GBP';
-        $amount   = 55.50;
-
-        $this->moneyFactory
-             ->createWithCurrencyCode($amount, $currency)
-             ->shouldBeCalled();
-
-        $this->createMoney($amount, $currency);
-    }
-
-    public function it_returns_created_money_from_currency_code()
-    {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithCurrencyCode(Argument::any(), Argument::any())
-             ->willReturn($money);
-
-        $this->createMoney(0, 'GBP')->shouldReturn($money);
-    }
-
-    public function it_creates_money_using_default_currency()
-    {
-        $amount   = 55.50;
-
-        $this->moneyFactory
-             ->createWithDefaultCurrency($amount)
-             ->shouldBeCalled();
-
-        $this->createMoney($amount);
-    }
-
-    public function it_returns_created_money_from_default_currency()
-    {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithDefaultCurrency(Argument::any())
-             ->willReturn($money);
-
-        $this->createMoney(0)->shouldReturn($money);
-    }
-
-    /*
-     * setDefaultCurrency()
-     */
-
-    public function it_sets_default_currency()
-    {
-        $currency = new Currency('GBP');
-
-        $this->moneyFactory
-             ->setDefaultCurrency($currency)
-             ->shouldBeCalled();
-
-        $this->setDefaultCurrency($currency);
+        $this->beConstructedWith($this->priceFactory);
     }
 
     /*
@@ -206,7 +115,7 @@ class FactorySpec extends ObjectBehavior
 
     public function it_create_a_default_instance_of_Factory()
     {
-        $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\Factory');
+        $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\TaxedPriceFactory');
     }
 
     public function it_creates_a_default_instance_with_some_config()
@@ -214,30 +123,12 @@ class FactorySpec extends ObjectBehavior
         $factory = $this::createDefaultInstance();
 
         // With throw if currency GBP is no found so proves the config has been read
-        $factory->createMoney(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
+        $factory->createTaxedPrice(10, 2, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
     }
 
     /*
      * static methods
      */
-
-    public function it_proxies_static_create_calls_to_an_instance_of_factory(Factory $factory)
-    {
-        $this::setStaticFactory($factory);
-
-        $factory->createMoney(10, 'GBP')->shouldBeCalled();
-
-        $this::staticCreateMoney(10, 'GBP');
-    }
-
-    public function it_returns_statically_created_money(Factory $factory, Money $money)
-    {
-        $this::setStaticFactory($factory);
-
-        $factory->createMoney(Argument::any(), Argument::any())->willReturn($money);
-
-        $this::staticCreateMoney(0, 'GBP')->shouldReturn($money);
-    }
 
     public function it_proxies_static_create_price_calls_to_an_instance_of_factory(Factory $factory)
     {
@@ -264,13 +155,7 @@ class FactorySpec extends ObjectBehavior
         $this::getStaticFactory()->shouldReturn($factory);
     }
 
-    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreateMoney()
-    {
-        // With throw if currency GBP is no found so proves the config has been read
-        $this::staticCreateMoney(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
-    }
-
-    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreateTaxPrice()
+    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreateTaxeddePrice()
     {
         // With throw if currency GBP is no found so proves the config has been read
         $this::staticCreateTaxedPrice(10, 10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
@@ -278,7 +163,7 @@ class FactorySpec extends ObjectBehavior
 
     public function it_creates_default_static_factory_if_one_is_not_set_during_getStaticFactory()
     {
-        $this::getStaticFactory()->shouldReturnAnInstanceOf('SCL\Currency\Factory');
+        $this::getStaticFactory()->shouldReturnAnInstanceOf('SCL\Currency\TaxedPriceFactory');
     }
 
 
