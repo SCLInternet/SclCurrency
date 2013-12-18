@@ -144,7 +144,7 @@ class MoneyFactorySpec extends ObjectBehavior
 
         $factory->create(10, 'GBP')->shouldBeCalled();
 
-        $this::staticCreateMoney(10, 'GBP');
+        $this::staticCreate(10, 'GBP');
     }
 
     public function it_returns_statically_created_money(MoneyFactory $factory, Money $money)
@@ -153,7 +153,7 @@ class MoneyFactorySpec extends ObjectBehavior
 
         $factory->create(Argument::any(), Argument::any())->willReturn($money);
 
-        $this::staticCreateMoney(0, 'GBP')->shouldReturn($money);
+        $this::staticCreate(0, 'GBP')->shouldReturn($money);
     }
 
     public function it_returns_static_factory(MoneyFactory $factory)
@@ -163,10 +163,10 @@ class MoneyFactorySpec extends ObjectBehavior
         $this::getStaticFactory()->shouldReturn($factory);
     }
 
-    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreateMoney()
+    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreate()
     {
         // With throw if currency GBP is no found so proves the config has been read
-        $this::staticCreateMoney(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
+        $this::staticCreate(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
     }
 
     public function it_creates_default_static_factory_if_one_is_not_set_during_getStaticFactory()

@@ -95,7 +95,7 @@ class MoneyFactory
      *
      * @return \SCL\Currency\Money
      */
-    public static function staticCreateMoney($amount, $currency = null)
+    public static function staticCreate($amount, $currency = null)
     {
         self::assertStaticFactoryHasBeenCreated();
 
