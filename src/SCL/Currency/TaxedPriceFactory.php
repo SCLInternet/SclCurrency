@@ -84,7 +84,7 @@ class TaxedPriceFactory
      *
      * @return TaxedPrice
      */
-    public function staticCreateTaxedPrice($amount, $tax, $currency = null)
+    public function staticCreate($amount, $tax, $currency = null)
     {
         self::assertStaticFactoryHasBeenCreated();
 

@@ -135,7 +135,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
 
         $factory->createTaxedPrice(10, 2, 'GBP')->shouldBeCalled();
 
-        $this::staticCreateTaxedPrice(10, 2, 'GBP');
+        $this::staticCreate(10, 2, 'GBP');
     }
 
     public function it_returns_statically_created_price(TaxedPriceFactory $factory, TaxedPrice $price)
@@ -144,7 +144,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
 
         $factory->createTaxedPrice(Argument::any(), Argument::any(), Argument::any())->willReturn($price);
 
-        $this::staticCreateTaxedPrice(0, 0, 'GBP')->shouldReturn($price);
+        $this::staticCreate(0, 0, 'GBP')->shouldReturn($price);
     }
 
     public function it_returns_static_factory(TaxedPriceFactory $factory)
@@ -154,10 +154,10 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this::getStaticFactory()->shouldReturn($factory);
     }
 
-    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreateTaxeddePrice()
+    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreate()
     {
         // With throw if currency GBP is no found so proves the config has been read
-        $this::staticCreateTaxedPrice(10, 10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
+        $this::staticCreate(10, 10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
     }
 
     public function it_creates_default_static_factory_if_one_is_not_set_during_getStaticFactory()
