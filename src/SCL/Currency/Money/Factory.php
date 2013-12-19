@@ -3,8 +3,9 @@
 namespace SCL\Currency\Money;
 
 use SCL\Currency\Currency;
+use SCL\Currency\Factory\Factory as FactoryInterface;
 
-interface Factory
+interface Factory extends FactoryInterface
 {
     /**
      * @param float    $amount

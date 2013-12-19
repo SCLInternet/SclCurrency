@@ -27,7 +27,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     }
 
     /*
-     * createTaxedPrice()
+     * create()
      */
 
     public function it_creates_price_using_given_objects()
@@ -39,7 +39,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithObjects($amount, $tax)
              ->shouldBeCalled();
 
-        $this->createTaxedPrice($amount, $tax);
+        $this->create($amount, $tax);
     }
 
     public function it_returns_created_price_using_given_objects()
@@ -52,7 +52,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithObjects(Argument::any(), Argument::any())
              ->willReturn($price);
 
-        $this->createTaxedPrice($amount, $tax)->shouldReturn($price);
+        $this->create($amount, $tax)->shouldReturn($price);
     }
 
     public function it_create_price_using_values()
@@ -65,7 +65,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithValues($amount, $tax, $currency)
              ->shouldBeCalled();
 
-        $this->createTaxedPrice($amount, $tax, $currency);
+        $this->create($amount, $tax, $currency);
     }
 
     public function it_returns_created_price_using_values()
@@ -79,7 +79,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithValues(Argument::any(), Argument::any(), Argument::any())
              ->willReturn($price);
 
-        $this->createTaxedPrice(10, 2, 'GBP')->shouldReturn($price);
+        $this->create(10, 2, 'GBP')->shouldReturn($price);
     }
 
     public function it_creates_price_using_default_currency()
@@ -91,7 +91,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithValuesAndDefaultCurrency($amount, $tax)
              ->shouldBeCalled();
 
-        $this->createTaxedPrice($amount, $tax);
+        $this->create($amount, $tax);
     }
 
     public function it_returns_created_price_using_default_currency()
@@ -105,7 +105,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
              ->createWithValuesAndDefaultCurrency(Argument::any(), Argument::any())
              ->willReturn($price);
 
-        $this->createTaxedPrice(10, 2)->shouldReturn($price);
+        $this->create(10, 2)->shouldReturn($price);
     }
 
     /*
@@ -122,7 +122,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $factory = $this::createDefaultInstance();
 
         // With throw if currency GBP is no found so proves the config has been read
-        $factory->createTaxedPrice(10, 2, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
+        $factory->create(10, 2, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
     }
 
     /*
@@ -133,7 +133,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     {
         $this::setStaticFactory($factory);
 
-        $factory->createTaxedPrice(10, 2, 'GBP')->shouldBeCalled();
+        $factory->create(10, 2, 'GBP')->shouldBeCalled();
 
         $this::staticCreate(10, 2, 'GBP');
     }
@@ -142,7 +142,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     {
         $this::setStaticFactory($factory);
 
-        $factory->createTaxedPrice(Argument::any(), Argument::any(), Argument::any())->willReturn($price);
+        $factory->create(Argument::any(), Argument::any(), Argument::any())->willReturn($price);
 
         $this::staticCreate(0, 0, 'GBP')->shouldReturn($price);
     }

@@ -3,9 +3,10 @@
 namespace SCL\Currency\TaxedPrice;
 
 use SCL\Currency\Money;
+use SCL\Currency\Factory\Factory as FactoryInterface;
 use SCL\Currency\TaxedPrice;
 
-interface Factory
+interface Factory extends FactoryInterface
 {
     /**
      * @return TaxedPrice
