@@ -14,15 +14,15 @@ class CalculatorSpec extends ObjectBehavior
 
     public function let()
     {
-        $this->currency = new Currency('GBP');
+        $this->currency = new Currency('GBP', 2);
     }
 
     public function it_makes_add_throw_for_a_currency_mismatch()
     {
         $this->shouldThrow(new CurrencyMismatchException())
              ->duringAdd(
-                new Money(0, new Currency('GBP')),
-                new Money(0, new Currency('USD'))
+                new Money(0, new Currency('GBP', 2)),
+                new Money(0, new Currency('USD', 2))
              );
     }
 
@@ -38,8 +38,8 @@ class CalculatorSpec extends ObjectBehavior
     {
         $this->shouldThrow(new CurrencyMismatchException())
              ->duringSubtract(
-                new Money(0, new Currency('GBP')),
-                new Money(0, new Currency('USD'))
+                new Money(0, new Currency('GBP', 2)),
+                new Money(0, new Currency('USD', 2))
              );
     }
 

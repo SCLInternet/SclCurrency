@@ -23,7 +23,8 @@
     },
     "autoload": {
         "psr-0": {
-            "SCL\\Currency\\": "src/"
+            "SCL\\Currency\\": "src/",
+            "spec\\SCL\\": "./"
         }
     }
 }

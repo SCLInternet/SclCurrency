@@ -48,7 +48,7 @@ class Formatter
 
         $result = sprintf(
             '%.' . $this->getPrecision() . 'f',
-            $this->getValueAsDecimalNumber()
+            $value->getValue()
         );
 
         if ($this->config['symbol_position'] === 'left') {

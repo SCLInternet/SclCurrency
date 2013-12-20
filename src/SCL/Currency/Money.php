@@ -7,24 +7,24 @@ class Money
     /**
      * @var Currency
      */
-    protected $currency;
+    private $currency;
 
     /**
      * @var int
      */
-    protected $value = 0;
+    private $units = 0;
 
     /**
-     * @param int      $value
+     * @param int      $units
      * @param Currency $precision
      */
-    public function __construct($value, Currency $currency)
+    public function __construct($units, Currency $currency)
     {
-        if (!is_int($value)) {
+        if (!is_int($units)) {
             throw new \InvalidArgumentException();
         }
 
-        $this->value    = $value;
+        $this->units    = $units;
         $this->currency = $currency;
     }
 
@@ -37,11 +37,19 @@ class Money
     }
 
     /**
+     * @return int
+     */
+    public function getUnits()
+    {
+        return $this->units;
+    }
+
+    /**
      * @return float
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->currency->addPrecision($this->units);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace SCL\Currency;
 
+use SCL\Currency\Money\NumberScaler;
+
 class Currency
 {
     /**
@@ -10,11 +12,24 @@ class Currency
     private $code;
 
     /**
-     * @param string $code
+     * @var int
      */
-    public function __construct($code)
+    private $precision;
+
+    /**
+     * @var NumberScaler
+     */
+    private $scaler;
+
+    /**
+     * @param string $code
+     * @param in     $precision
+     */
+    public function __construct($code, $precision)
     {
-        $this->code = (string) $code;
+        $this->code      = (string) $code;
+        $this->precision = (int) $precision;
+        $this->scaler    = new NumberScaler($this->precision);
     }
 
     /**
@@ -23,5 +38,30 @@ class Currency
     public function getCode()
     {
         return $this->code;
+    }
+
+    public function getPrecision()
+    {
+        return $this->precision;
+    }
+
+    /**
+     * @param float $value
+     *
+     * @return int
+     */
+    public function removePrecision($value)
+    {
+        return $this->scaler->removePrecision($value);
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return float
+     */
+    public function addPrecision($value)
+    {
+        return $this->scaler->addPrecision($value);
     }
 }

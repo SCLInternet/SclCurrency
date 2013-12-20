@@ -57,7 +57,7 @@ class Calculator
         $this->assertCurrenciesMatch();
 
         return new Money(
-            $operation($this->valueA->getValue(), $this->valueB->getValue()),
+            $operation($this->valueA->getUnits(), $this->valueB->getUnits()),
             $this->valueA->getCurrency()
         );
     }

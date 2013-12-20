@@ -5,63 +5,38 @@ namespace SCL\Currency;
 use SCL\Currency\Money\Factory as Factory;
 use SCL\Currency\Money\ConfigFactory;
 use SCL\Currency\Factory\AbstractFactoryFacade;
+use SCL\Currency\Currency;
+use SCL\Currency\Exception\NoDefaultCurrencyException;
 
-class MoneyFactory extends AbstractFactoryFacade
+class MoneyFactory
 {
-    /**
-     * @param float                $amount
-     * @param string|Currency|null $currency
-     *
-     * @return \SCL\Currency\Money
-     */
-    public function create($amount, $currency = null)
+    private $defaultCurrency;
+
+    public function createFromValue($value)
     {
-        if (null === $currency) {
-            return $this->factory->createWithDefaultCurrency($amount);
-        }
+        $this->assertDefaultCurrencyIsSet();
 
-        if ($currency instanceof Currency) {
-            return $this->factory->createWithCurrency($amount, $currency);
-        }
+        $units = $this->defaultCurrency->removePrecision($value);
 
-        return $this->factory->createWithCurrencyCode($amount, $currency);
+        return new Money($units, $this->defaultCurrency);
     }
 
-    /**
-     * @param float                $amount
-     * @param string|Currency|null $currency
-     *
-     * @return \SCL\Currency\Money
-     */
-    public static function staticCreate($amount, $currency = null)
+    public function createFromUnits($units)
     {
-        self::assertStaticFactoryHasBeenCreated();
+        $this->assertDefaultCurrencyIsSet();
 
-        return self::$staticFactory->create($amount, $currency);
-    }
-
-    /**
-     * @return Factory
-     */
-    public function getInternalFactory()
-    {
-        return $this->factory;
+        return new Money($units, $this->defaultCurrency);
     }
 
     public function setDefaultCurrency(Currency $currency)
     {
-        $this->factory->setDefaultCurrency($currency);
+        $this->defaultCurrency = $currency;
     }
 
-    /**
-     * @return Factory
-     */
-    public static function createDefaultInstance()
+    private function assertDefaultCurrencyIsSet()
     {
-        return new self(
-            new ConfigFactory(
-                include __DIR__ . '/../../../config/currencies.php'
-            )
-        );
+        if (!$this->defaultCurrency) {
+            throw new NoDefaultCurrencyException();
+        }
     }
 }

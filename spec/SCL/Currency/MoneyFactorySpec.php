@@ -4,178 +4,87 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use SCL\Currency\Money\Factory;
 use SCL\Currency\Currency;
-use SCL\Currency\Money;
-use SCL\Currency\MoneyFactory;
+use SCL\Currency\Exception\NoDefaultCurrencyException;
 
 class MoneyFactorySpec extends ObjectBehavior
 {
-    private $moneyFactory;
-
-    public function letgo()
-    {
-        $this::clearStaticFactory();
-    }
-
-    public function let(Factory $moneyFactory)
-    {
-        $this->moneyFactory = $moneyFactory;
-
-        $this->beConstructedWith($this->moneyFactory);
-    }
-
-    public function it_provides_access_to_internal_factory()
-    {
-        $this->getInternalFactory()->shouldReturn($this->moneyFactory);
-    }
-
     /*
-     * create()
+     * createFromValue()
      */
 
-    public function it_creates_money_using_given_currency()
+    public function it_returns_Money_from_createFromValue()
     {
-        $currency = new Currency('GBP');
-        $amount   = 55.50;
+        $this->setDefaultCurrency(new Currency('XXX', 2));
 
-        $this->moneyFactory
-             ->createWithCurrency($amount, $currency)
-             ->shouldBeCalled();
-
-        $this->create($amount, $currency);
+        $this->createFromValue(1.00)
+             ->shouldReturnAnInstanceOf('SCL\Currency\Money');
     }
 
-    public function it_returns_created_money_from_given_currency()
+    public function it_loads_uses_default_currency_to_convert_to_units_in_createFromValue(Currency $currency)
     {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithCurrency(Argument::any(), Argument::any())
-             ->willReturn($money);
-
-        $this->create(0, new Currency('GBP'))->shouldReturn($money);
-    }
-
-    public function it_creates_money_using_currency_code()
-    {
-        $currency = 'GBP';
-        $amount   = 55.50;
-
-        $this->moneyFactory
-             ->createWithCurrencyCode($amount, $currency)
-             ->shouldBeCalled();
-
-        $this->create($amount, $currency);
-    }
-
-    public function it_returns_created_money_from_currency_code()
-    {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithCurrencyCode(Argument::any(), Argument::any())
-             ->willReturn($money);
-
-        $this->create(0, 'GBP')->shouldReturn($money);
-    }
-
-    public function it_creates_money_using_default_currency()
-    {
-        $amount   = 55.50;
-
-        $this->moneyFactory
-             ->createWithDefaultCurrency($amount)
-             ->shouldBeCalled();
-
-        $this->create($amount);
-    }
-
-    public function it_returns_created_money_from_default_currency()
-    {
-        $money = new Money(0, new Currency('GBP'));
-
-        $this->moneyFactory
-             ->createWithDefaultCurrency(Argument::any())
-             ->willReturn($money);
-
-        $this->create(0)->shouldReturn($money);
-    }
-
-    /*
-     * setDefaultCurrency()
-     */
-
-    public function it_sets_default_currency()
-    {
-        $currency = new Currency('GBP');
-
-        $this->moneyFactory
-             ->setDefaultCurrency($currency)
-             ->shouldBeCalled();
+        $currency->removePrecision(1.0)->shouldBeCalled()->willReturn(0);
 
         $this->setDefaultCurrency($currency);
+
+        $this->createFromValue(1.00);
+    }
+
+    public function it_sets_money_units_in_createFromValue(Currency $currency)
+    {
+        $currency->removePrecision(Argument::any())->willReturn(500);
+
+        $this->setDefaultCurrency($currency);
+
+        $this->createFromValue(0)->getUnits()->shouldReturn(500);
+    }
+
+    public function it_sets_money_currency_in_createFromValue()
+    {
+        $currency = new Currency('XXX', 2);
+
+        $this->setDefaultCurrency($currency);
+
+        $this->createFromValue(0)->getCurrency()->shouldReturn($currency);
+    }
+
+    public function it_should_throw_from_createFromValue_if_default_currency_not_set()
+    {
+        $this->shouldThrow(new NoDefaultCurrencyException())
+             ->duringCreateFromValue(0);
     }
 
     /*
-     * createDefaultFactory()
+     * createFromUnits()
      */
 
-    public function it_create_a_default_instance_of_Factory()
+    public function it_returns_Money_from_createFromUnits()
     {
-        $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\MoneyFactory');
+        $this->setDefaultCurrency(new Currency('XXX', 2));
+
+        $this->createFromUnits(100)
+             ->shouldReturnAnInstanceOf('SCL\Currency\Money');
     }
 
-    public function it_creates_a_default_instance_with_some_config()
+    public function it_sets_money_units_in_createFromUnits()
     {
-        $factory = $this::createDefaultInstance();
+        $this->setDefaultCurrency(new Currency('XXX', 2));
 
-        // With throw if currency GBP is no found so proves the config has been read
-        $factory->create(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
+        $this->createFromUnits(100)->getUnits()->shouldReturn(100);
     }
 
-    /*
-     * static methods
-     */
-
-    public function it_proxies_static_create_calls_to_an_instance_of_factory(MoneyFactory $factory)
+    public function it_sets_money_currency_in_createFromUnits()
     {
-        $this::setStaticFactory($factory);
+        $currency = new Currency('XXX', 2);
 
-        $factory->create(10, 'GBP')->shouldBeCalled();
+        $this->setDefaultCurrency($currency);
 
-        $this::staticCreate(10, 'GBP');
+        $this->createFromUnits(0)->getCurrency()->shouldReturn($currency);
     }
 
-    public function it_returns_statically_created_money(MoneyFactory $factory, Money $money)
+    public function it_should_throw_from_createFromUnits_if_default_currency_not_set()
     {
-        $this::setStaticFactory($factory);
-
-        $factory->create(Argument::any(), Argument::any())->willReturn($money);
-
-        $this::staticCreate(0, 'GBP')->shouldReturn($money);
-    }
-
-    public function it_returns_static_factory(MoneyFactory $factory)
-    {
-        $this::setStaticFactory($factory);
-
-        $this::getStaticFactory()->shouldReturn($factory);
-    }
-
-    public function it_creates_default_static_factory_if_one_is_not_set_during_staticCreate()
-    {
-        // With throw if currency GBP is no found so proves the config has been read
-        $this::staticCreate(10, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\Money');
-    }
-
-    public function it_creates_default_static_factory_if_one_is_not_set_during_getStaticFactory()
-    {
-        $this::getStaticFactory()->shouldReturnAnInstanceOf('SCL\Currency\MoneyFactory');
-    }
-
-    private function createMockMoney($amount = 0)
-    {
-        return new Money($amount, new Currency('GBP'));
+        $this->shouldThrow(new NoDefaultCurrencyException())
+             ->duringCreateFromUnits(0);
     }
 }

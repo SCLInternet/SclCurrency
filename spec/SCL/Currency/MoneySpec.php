@@ -9,15 +9,15 @@ class MoneySpec extends ObjectBehavior
 {
     private $currency;
 
-    private $value;
+    private $units;
 
     public function let()
     {
-        $this->currency = new Currency('GBP');
+        $this->currency = new Currency('GBP', 2);
 
-        $this->value = 1199;
+        $this->units = 1199;
 
-        $this->beConstructedWith($this->value, $this->currency);
+        $this->beConstructedWith($this->units, $this->currency);
     }
 
     public function it_returns_currency()
@@ -25,12 +25,17 @@ class MoneySpec extends ObjectBehavior
         $this->getCurrency()->shouldReturn($this->currency);
     }
 
-    public function it_returns_value()
+    public function it_returns_units()
     {
-        $this->getValue()->shouldReturn($this->value);
+        $this->getUnits()->shouldReturn($this->units);
     }
 
-    public function it_throws_when_constructed_with_floating_point_value()
+    public function it_returns_value()
+    {
+        $this->getValue()->shouldReturn(11.99);
+    }
+
+    public function it_throws_when_constructed_with_floating_point_units()
     {
         $this->shouldThrow(new \InvalidArgumentException())
              ->during('__construct', array(10.1, $this->currency));
@@ -43,7 +48,7 @@ class MoneySpec extends ObjectBehavior
 
     public function it_returns_false_from_isSameCurrency_for_different_currencies()
     {
-        $this->shouldNotBeSameCurrency(new Currency('USD'));
+        $this->shouldNotBeSameCurrency(new Currency('USD', 2));
     }
 
     /*

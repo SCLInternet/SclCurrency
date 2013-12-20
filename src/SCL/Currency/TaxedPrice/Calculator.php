@@ -57,7 +57,7 @@ class Calculator
      */
     public function calculateTaxRate(Money $amount, Money $taxAmount)
     {
-        return new TaxRate($taxAmount->getValue() / ($amount->getValue() / 100));
+        return new TaxRate($taxAmount->getUnits() / ($amount->getUnits() / 100));
     }
 
     /**
@@ -69,7 +69,7 @@ class Calculator
         $calculation
     ) {
         return new Money(
-            intval(round($calculation($value->getValue(), $rate->getPercentage()))),
+            intval(round($calculation($value->getUnits(), $rate->getPercentage()))),
             $value->getCurrency()
         );
     }

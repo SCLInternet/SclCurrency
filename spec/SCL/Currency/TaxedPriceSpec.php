@@ -18,7 +18,7 @@ class TaxedPriceSpec extends ObjectBehavior
 
     public function let()
     {
-        $this->currency = new Currency('GBP');
+        $this->currency = new Currency('GBP', 2);
 
         $this->amount = new Money(10, $this->currency);
         $this->tax    = new Money(2, $this->currency);
@@ -28,8 +28,8 @@ class TaxedPriceSpec extends ObjectBehavior
 
     public function it_throws_if_currencies_mismatch()
     {
-        $amount = new Money(0, new Currency('GBP'));
-        $tax    = new Money(0, new Currency('USD'));
+        $amount = new Money(0, new Currency('GBP', 2));
+        $tax    = new Money(0, new Currency('USD', 2));
 
         $this->shouldThrow(new CurrencyMismatchException())
              ->during('__construct', array($amount, $tax));

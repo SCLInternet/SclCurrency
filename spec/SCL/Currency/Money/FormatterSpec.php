@@ -10,9 +10,11 @@ use SCL\Currency\Exception\UnknownCurrencyException;
 
 class FormatterSpec extends ObjectBehavior
 {
+    private $config;
+
     public function let()
     {
-        $this->beConstructedWith(array(
+        $this->config = array(
             'GBP' => array(
                 'name'            => 'Great British Pounds',
                 'precision'       => '2',
@@ -29,22 +31,9 @@ class FormatterSpec extends ObjectBehavior
                 'symbol_html'     => 'BTC',
                 'symbol_position' => 'right',
             ),
-        ));
-    }
+        );
 
-    public function it_throws_if_currency_is_unknown_for_formatAsNumber()
-    {
-        $this->shouldThrow(new UnknownCurrencyException('UNK'))
-             ->duringFormatAsNumber($this->createMoney(0, 'UNK'));
-    }
-
-    public function it_formats_currency_to_number()
-    {
-        $this->formatAsNumber($this->createMoney(100, 'GBP'))
-             ->shouldReturn(1.0);
-
-        $this->formatAsNumber($this->createMoney(567000000, 'BTC'))
-             ->shouldReturn(5.67);
+        $this->beConstructedWith($this->config);
     }
 
     public function it_throws_if_currency_is_unknown_for_formatAsString()
@@ -76,6 +65,7 @@ class FormatterSpec extends ObjectBehavior
      */
     private function createMoney($amount, $currency)
     {
-        return new Money($amount, new Currency($currency));
+        $precision = isset($this->config[$currency]) ? $this->config[$currency]['precision'] : 2;
+        return new Money($amount, new Currency($currency, $precision));
     }
 }

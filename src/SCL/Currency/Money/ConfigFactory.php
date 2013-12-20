@@ -44,12 +44,7 @@ class ConfigFactory implements Factory
         $this->config = $config;
     }
 
-    public function setDefaultCurrency(Currency $currency)
-    {
-        $this->defaultCurrency = $currency;
-    }
-
-    public function createWithCurrencyCode($amount, $code)
+    public function createFromUnitsWithCurrencyCode($amount, $code)
     {
         $this->amount       = $amount;
         $this->currencyCode = $code;
@@ -58,7 +53,7 @@ class ConfigFactory implements Factory
         return $this->createMoneyInstance();
     }
 
-    public function createWithCurrency($amount, Currency $currency)
+    public function createFromUnitsWithCurrency($amount, Currency $currency)
     {
         $this->amount       = $amount;
         $this->currencyCode = $currency->getCode();
@@ -67,16 +62,69 @@ class ConfigFactory implements Factory
         return $this->createMoneyInstance();
     }
 
+    public function createFromUnitsWithDefaultCurrency($amount)
+    {
+        if (!$this->defaultCurrency) {
+            throw new NoDefaultCurrencyException();
+        }
+
+        $this->amount       = $amount;
+        $this->currencyCode = $this->defaultCurrency->getCode();
+        $this->currency     = $this->defaultCurrency;
+
+        return $this->createMoneyInstance();
+    }
+
+    public function createWithCurrencyCode($amount, $code)
+    {
+        return $this->createFromUnitsWithCurrencyCode(
+            $this->removePrecision($amount, $code),
+            $code
+        );
+    }
+
+    public function createWithCurrency($amount, Currency $currency)
+    {
+        return $this->createFromUnitsWithCurrency(
+            $this->removePrecision($amount, $currency->getCode()),
+            $currency
+        );
+    }
+
     public function createWithDefaultCurrency($amount)
     {
         if (!$this->defaultCurrency) {
             throw new NoDefaultCurrencyException();
         }
 
-        $this->currencyCode = $this->defaultCurrency->getCode();
-        $this->currency     = $this->defaultCurrency;
+        return $this->createFromUnitsWithDefaultCurrency(
+            $this->removePrecision($amount, $this->defaultCurrency->getCode())
+        );
+    }
 
-        return $this->createMoneyInstance();
+    public function setDefaultCurrency(Currency $currency)
+    {
+        $this->defaultCurrency = $currency;
+    }
+
+    /**
+     * @param int    $amount
+     * @param string $currencyCode
+     *
+     * @return float
+     */
+    private function removePrecision($amount, $currencyCode)
+    {
+        $this->currencyCode = $currencyCode;
+
+        $calculator = null;
+
+        if (!$calculator) {
+            $config = $this->getCurrencyConfig();
+            $calculator = new NumberScaler($config['precision']);
+        }
+
+        return $calculator->removePrecision($amount);
     }
 
     /**
@@ -84,20 +132,9 @@ class ConfigFactory implements Factory
      */
     private function createMoneyInstance()
     {
-        return new Money(
-            $this->getCurrencyUnits(),
-            $this->currency
-        );
-    }
+        $this->assertKnownCurrency();
 
-    /**
-     * @return int
-     */
-    private function getCurrencyUnits()
-    {
-        $config = $this->getCurrencyConfig();
-
-        return intval($this->amount * pow(10, $config['precision']));
+        return new Money($this->amount, $this->currency);
     }
 
     /**
@@ -109,9 +146,7 @@ class ConfigFactory implements Factory
      */
     private function getCurrencyConfig()
     {
-        if (!array_key_exists($this->currencyCode, $this->config)) {
-            throw new UnknownCurrencyException($this->currencyCode);
-        }
+        $this->assertKnownCurrency();
 
         return $this->config[$this->currencyCode];
     }
@@ -123,10 +158,19 @@ class ConfigFactory implements Factory
      */
     private function createCurrency()
     {
+        $this->assertKnownCurrency();
+
         if (!array_key_exists($this->currencyCode, $this->currencies)) {
             $this->currencies[$this->currencyCode] = new Currency($this->currencyCode);
         }
 
         return $this->currencies[$this->currencyCode];
+    }
+
+    private function assertKnownCurrency()
+    {
+        if (!array_key_exists($this->currencyCode, $this->config)) {
+            throw new UnknownCurrencyException($this->currencyCode);
+        }
     }
 }

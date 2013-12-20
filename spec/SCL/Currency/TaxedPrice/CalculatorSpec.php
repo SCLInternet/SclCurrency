@@ -73,6 +73,6 @@ class CalculatorSpec extends ObjectBehavior
      */
     private function createMoney($amount)
     {
-        return new Money($amount, new Currency('GBP'));
+        return new Money($amount, new Currency('GBP', 2));
     }
 }
