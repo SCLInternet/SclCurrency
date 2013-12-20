@@ -87,4 +87,13 @@ class MoneyFactorySpec extends ObjectBehavior
         $this->shouldThrow(new NoDefaultCurrencyException())
              ->duringCreateFromUnits(0);
     }
+
+    /*
+     * createDefaultInstance()
+     */
+
+    public function it_returns_instance_from_createDefaultInstance()
+    {
+        $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\MoneyFactory');
+    }
 }

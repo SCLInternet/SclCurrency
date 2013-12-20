@@ -6,7 +6,6 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use SCL\Currency\Exception\UnknownCurrencyException;
 use SCL\Currency\Currency;
-use SCL\Currency\CurrencyFactory;
 
 class CurrencyFactorySpec extends ObjectBehavior
 {
@@ -50,5 +49,16 @@ class CurrencyFactorySpec extends ObjectBehavior
         $currency = $this->create('GBP');
 
         $this->create('GBP')->shouldReturn($currency);
+    }
+
+    public function it_returns_instance_from_createDefaultInstance()
+    {
+        $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\CurrencyFactory');
+    }
+
+    public function it_loads_default_config_in_createDefaultInstance()
+    {
+        // GBP is in the default config
+        $this::createDefaultInstance()->create('GBP');
     }
 }

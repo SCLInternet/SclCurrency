@@ -39,4 +39,9 @@ class MoneyFactory
             throw new NoDefaultCurrencyException();
         }
     }
+
+    public static function createDefaultInstance()
+    {
+        return new self();
+    }
 }
