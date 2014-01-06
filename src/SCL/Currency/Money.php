@@ -15,8 +15,7 @@ class Money
     private $units = 0;
 
     /**
-     * @param int      $units
-     * @param Currency $precision
+     * @param int $units
      */
     public function __construct($units, Currency $currency)
     {

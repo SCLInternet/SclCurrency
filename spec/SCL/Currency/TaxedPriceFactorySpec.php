@@ -6,10 +6,20 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use SCL\Currency\Currency;
 use SCL\Currency\Money;
+use SCL\Currency\MoneyFactory;
 use SCL\Currency\TaxedPrice;
 
 class TaxedPriceFactorySpec extends ObjectBehavior
 {
+    private $moneyFactory;
+
+    public function let(MoneyFactory $moneyFactory)
+    {
+        $this->moneyFactory = $moneyFactory;
+
+        $this->beConstructedWith($moneyFactory);
+    }
+
     /*
      * createFromMoney()
      */
@@ -36,6 +46,25 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this->createFromMoney($this->createMoney(0), $tax)
              ->getTax()
              ->shouldReturn($tax);
+    }
+
+    /*
+     * createFromUnitsAndRate()
+     */
+
+    public function it_returns_calculated_price()
+    {
+        $amount = 50;
+
+        $this->moneyFactory
+             ->createFromUnits($amount)
+             ->shouldBeCalled()
+             ->willReturn(new Money($amount, new Currency('GBP', 2)));
+
+        $price = $this->createFromUnitsAndRate($amount, 20);
+
+        $price->getAmount()->getUnits()->shouldReturn($amount);
+        $price->getTax()->getUnits()->shouldReturn(10);
     }
 
     /*
