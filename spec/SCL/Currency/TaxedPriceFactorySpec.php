@@ -68,7 +68,7 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     }
 
     /*
-     * createDefaultFactory()
+     * createDefaultInstance()
      */
 
     public function it_create_a_default_instance_of_Factory()
@@ -76,15 +76,25 @@ class TaxedPriceFactorySpec extends ObjectBehavior
         $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\TaxedPriceFactory');
     }
 
-    /*
-    public function it_creates_a_default_instance_with_some_config()
+    public function it_creates_a_default_instance_with_GBP_default_currency()
     {
         $factory = $this::createDefaultInstance();
 
-        // With throw if currency GBP is no found so proves the config has been read
-        $factory->create(10, 2, 'GBP')->shouldReturnAnInstanceOf('SCL\Currency\TaxedPrice');
+        $factory->getDefaultCurrency()->getCode()->shouldReturn('GBP');
     }
-    */
+
+    /*
+     * getDefaultCurrency()
+     */
+
+    public function it_returns_the_default_currency_from_the_money_factory()
+    {
+        $currency = new Currency('GBP', 2);
+
+        $this->moneyFactory->getDefaultCurrency()->shouldBeCalled()->willReturn($currency);
+
+        $this->getDefaultCurrency()->shouldReturn($currency);
+    }
 
     private function createMoney($amount)
     {

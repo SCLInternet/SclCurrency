@@ -10,8 +10,24 @@ use SCL\Currency\Exception\NoDefaultCurrencyException;
 
 class MoneyFactory
 {
+    /**
+     * @var Currency
+     */
     private $defaultCurrency;
 
+    /**
+     * @return MoneyFactory
+     */
+    public static function createDefaultInstance()
+    {
+        return new self();
+    }
+
+    /**
+     * @param float $value
+     *
+     * @return Money
+     */
     public function createFromValue($value)
     {
         $this->assertDefaultCurrencyIsSet();
@@ -21,6 +37,11 @@ class MoneyFactory
         return new Money($units, $this->defaultCurrency);
     }
 
+    /**
+     * @param int $value
+     *
+     * @return Money
+     */
     public function createFromUnits($units)
     {
         $this->assertDefaultCurrencyIsSet();
@@ -33,15 +54,18 @@ class MoneyFactory
         $this->defaultCurrency = $currency;
     }
 
+    /**
+     * @return Currency
+     */
+    public function getDefaultCurrency()
+    {
+        return $this->defaultCurrency;
+    }
+
     private function assertDefaultCurrencyIsSet()
     {
         if (!$this->defaultCurrency) {
             throw new NoDefaultCurrencyException();
         }
-    }
-
-    public static function createDefaultInstance()
-    {
-        return new self();
     }
 }

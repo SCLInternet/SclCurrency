@@ -89,6 +89,19 @@ class MoneyFactorySpec extends ObjectBehavior
     }
 
     /*
+     * getDefaultCurrency()
+     */
+
+    public function it_returns_the_default_currency()
+    {
+        $currency = new Currency('XXX', 2);
+
+        $this->setDefaultCurrency($currency);
+
+        $this->getDefaultCurrency()->shouldReturn($currency);
+    }
+
+    /*
      * createDefaultInstance()
      */
 

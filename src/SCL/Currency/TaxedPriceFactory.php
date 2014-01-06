@@ -16,7 +16,13 @@ class TaxedPriceFactory
      */
     public static function createDefaultInstance()
     {
-        return new self(MoneyFactory::createDefaultInstance());
+        $moneyFactory = MoneyFactory::createDefaultInstance();
+
+        $moneyFactory->setDefaultCurrency(
+            CurrencyFactory::createDefaultInstance()->create('GBP')
+        );
+
+        return new self($moneyFactory);
     }
 
     public function __construct(MoneyFactory $moneyFactory)
@@ -47,5 +53,13 @@ class TaxedPriceFactory
         $taxAmount = $taxCalc->calculateTaxAmount($amount, new TaxRate($rate));
 
         return $this->createFromMoney($amount, $taxAmount);
+    }
+
+    /**
+     * @return Currency
+     */
+    public function getDefaultCurrency()
+    {
+        return $this->moneyFactory->getDefaultCurrency();
     }
 }
