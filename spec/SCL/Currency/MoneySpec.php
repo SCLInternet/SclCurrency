@@ -38,7 +38,23 @@ class MoneySpec extends ObjectBehavior
     public function it_throws_when_constructed_with_floating_point_units()
     {
         $this->shouldThrow(new \InvalidArgumentException())
-             ->during('__construct', array(10.1, $this->currency));
+             ->duringCreateFromUnits(10.1, $this->currency);
+    }
+
+    public function it_has_a_factory_method_which_creates_from_value()
+    {
+        $money = $this::createFromValue(9.50, $this->currency);
+
+        $money->getValue()->shouldReturn(9.50);
+        $money->getCurrency()->shouldReturn($this->currency);
+    }
+
+    public function it_has_a_factory_method_which_creates_from_units()
+    {
+        $money = $this::createFromUnits(950, $this->currency);
+
+        $money->getUnits()->shouldReturn(950);
+        $money->getCurrency()->shouldReturn($this->currency);
     }
 
     public function it_returns_true_from_isSameCurrency_for_same_currencies()

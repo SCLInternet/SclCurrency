@@ -15,6 +15,26 @@ class Money
     private $units = 0;
 
     /**
+     * @param float $value
+     *
+     * @return Money
+     */
+    public static function createFromValue($value, Currency $currency)
+    {
+        return new self($currency->removePrecision($value), $currency);
+    }
+
+    /**
+     * @param int $units
+     *
+     * @return Money
+     */
+    public static function createFromUnits($units, Currency $currency)
+    {
+        return new self($units, $currency);
+    }
+
+    /**
      * @param int $units
      */
     public function __construct($units, Currency $currency)

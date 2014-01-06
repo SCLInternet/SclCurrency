@@ -32,9 +32,7 @@ class MoneyFactory
     {
         $this->assertDefaultCurrencyIsSet();
 
-        $units = $this->defaultCurrency->removePrecision($value);
-
-        return new Money($units, $this->defaultCurrency);
+        return Money::createFromValue($value, $this->defaultCurrency);
     }
 
     /**
@@ -46,7 +44,7 @@ class MoneyFactory
     {
         $this->assertDefaultCurrencyIsSet();
 
-        return new Money($units, $this->defaultCurrency);
+        return Money::createFromUnits($units, $this->defaultCurrency);
     }
 
     public function setDefaultCurrency(Currency $currency)
