@@ -76,6 +76,6 @@ class Money
      */
     public function isSameCurrency(Currency $currency)
     {
-        return $this->currency->getCode() === $currency->getCode();
+        return $this->currency->isEqualTo($currency);
     }
 }

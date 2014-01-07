@@ -4,6 +4,8 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use SCL\Currency\Currency;
+use SCL\Currency\Exception\PrecisionMismatchException;
 
 class CurrencySpec extends ObjectBehavior
 {
@@ -55,5 +57,27 @@ class CurrencySpec extends ObjectBehavior
         $this->beConstructedWith('XXX', 3);
 
         $this->addPrecision(4567)->shouldReturn(4.567);
+    }
+
+    public function it_is_not_equal_to_currency_with_a_different_code()
+    {
+        $other = new Currency('USD', 2);
+
+        $this->isEqualTo($other)->shouldReturn(false);
+    }
+
+    public function it_is_equal_to_currency_with_a_same_code()
+    {
+        $other = new Currency('GBP', 2);
+
+        $this->isEqualTo($other)->shouldReturn(true);
+    }
+
+    public function it_throws_if_equal_codes_mismatch_precision()
+    {
+        $other = new Currency('GBP', 1);
+
+        $this->shouldThrow(PrecisionMismatchException::create('GBP', 2, 1))
+             ->duringIsEqualTo($other);
     }
 }

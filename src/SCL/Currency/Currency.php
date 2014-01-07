@@ -3,6 +3,7 @@
 namespace SCL\Currency;
 
 use SCL\Currency\Money\NumberScaler;
+use SCL\Currency\Exception\PrecisionMismatchException;
 
 class Currency
 {
@@ -63,5 +64,31 @@ class Currency
     public function addPrecision($value)
     {
         return $this->scaler->addPrecision($value);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEqualTo(Currency $other)
+    {
+        $result = $this->code === $other->getCode();
+
+        if ($result && !$this->hasSamePrecision($other)) {
+            throw PrecisionMismatchException::create(
+                $this->code,
+                $this->precision,
+                $other->getPrecision()
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasSamePrecision(Currency $other)
+    {
+        return $this->precision === $other->getPrecision();
     }
 }
