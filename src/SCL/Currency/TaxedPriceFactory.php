@@ -33,9 +33,23 @@ class TaxedPriceFactory
     /*
      * @return TaxedPrice
      */
-    public function createFromMoney(Money $amount, Money $tax)
+    public function createFromMoney(Money $amount, Money $taxAmount)
     {
-        return new TaxedPrice($amount, $tax);
+        return new TaxedPrice($amount, $taxAmount);
+    }
+
+    /**
+     * @param int $amount
+     * @param int $taxAmount
+     *
+     * @return TaxedPrice
+     */
+    public function createFromUnits($amount, $taxAmount)
+    {
+        return new TaxedPrice(
+            $this->moneyFactory->createFromUnits($amount),
+            $this->moneyFactory->createFromUnits($taxAmount)
+        );
     }
 
     /**
@@ -44,11 +58,11 @@ class TaxedPriceFactory
      *
      * @return TaxedPrice
      */
-    public function createFromValues($amount, $tax)
+    public function createFromValues($amount, $taxAmount)
     {
         return new TaxedPrice(
             $this->moneyFactory->createFromValue($amount),
-            $this->moneyFactory->createFromValue($tax)
+            $this->moneyFactory->createFromValue($taxAmount)
         );
     }
 
