@@ -49,6 +49,30 @@ class TaxedPriceFactorySpec extends ObjectBehavior
     }
 
     /*
+     * createFromValues()
+     */
+
+    public function it_sets_price_in_createFromValues()
+    {
+        $this->moneyFactory->createFromValue(10.10)->willReturn($this->createMoney(1010));
+        $this->moneyFactory->createFromValue(2.2)->willReturn($this->createMoney(220));
+
+        $price = $this->createFromValues(10.10, 2.2);
+
+        $price->getAmount()->getValue()->shouldReturn(10.10);
+    }
+
+    public function it_sets_tax_in_createFromValues()
+    {
+        $this->moneyFactory->createFromValue(10.10)->willReturn($this->createMoney(1010));
+        $this->moneyFactory->createFromValue(2.2)->willReturn($this->createMoney(220));
+
+        $price = $this->createFromValues(10.10, 2.2);
+
+        $price->getTax()->getValue()->shouldReturn(2.2);
+    }
+
+    /*
      * createFromUnitsAndRate()
      */
 

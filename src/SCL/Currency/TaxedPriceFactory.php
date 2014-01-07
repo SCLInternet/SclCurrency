@@ -39,6 +39,20 @@ class TaxedPriceFactory
     }
 
     /**
+     * @param float $amount
+     * @param float $tax
+     *
+     * @return TaxedPrice
+     */
+    public function createFromValues($amount, $tax)
+    {
+        return new TaxedPrice(
+            $this->moneyFactory->createFromValue($amount),
+            $this->moneyFactory->createFromValue($tax)
+        );
+    }
+
+    /**
      * @param int   $units
      * @param float $rate
      *
