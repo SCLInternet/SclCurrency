@@ -11,7 +11,7 @@ class Accumulator
     /**
      * @var Money[]
      */
-    private $monies;
+    private $monies = array();
 
     /**
      * @var Currency
@@ -36,7 +36,10 @@ class Accumulator
      */
     public function calculateTotal()
     {
-        return Money::createFromUnits($this->getTotalUnits(), $this->currency);
+        // @todo This is bad! The currency returned should really be known.
+        $currency = $this->currency ?: new Currency('GBP', 2);
+
+        return Money::createFromUnits($this->getTotalUnits(), $currency);
     }
 
     /**

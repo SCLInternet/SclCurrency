@@ -24,6 +24,11 @@ class AccumulatorSpec extends ObjectBehavior
         $this->calculateTotal()->getUnits()->shouldReturn(10);
     }
 
+    public function it_returns_zero_for_empty_accumulator()
+    {
+        $this->calculateTotal()->getUnits()->shouldReturn(0);
+    }
+
     public function it_returns_total_equal_to_2_added_values()
     {
         $this->add($this->createMoney(10));
