@@ -49,11 +49,6 @@ class MoneyFactory
         return Money::createFromUnits($units, $this->getDefaultCurrency());
     }
 
-    public function setDefaultCurrency(Currency $currency)
-    {
-        $this->defaultCurrency = $currency;
-    }
-
     /**
      * @return Currency
      */
