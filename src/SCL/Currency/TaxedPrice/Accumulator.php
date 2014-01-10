@@ -18,7 +18,7 @@ class Accumulator
     /**
      * @var TaxedPrice[]
      */
-    private $prices = [];
+    private $prices = array();
 
     public function __construct(Currency $currency)
     {

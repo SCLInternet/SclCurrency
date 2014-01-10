@@ -4,6 +4,7 @@ namespace SCL\Currency\Money;
 
 use SCL\Currency\Money;
 use SCL\Currency\Exception\UnknownCurrencyException;
+use SCL\Currency\Config;
 
 class Formatter
 {
@@ -21,6 +22,14 @@ class Formatter
      * @var array
      */
     private $config;
+
+    /**
+     * @return Formatter
+     */
+    public static function createDefaultInstance()
+    {
+        return new self(Config::getDefaultConfig());
+    }
 
     public function __construct(array $currencies)
     {
@@ -58,14 +67,6 @@ class Formatter
         }
 
         return $result;
-    }
-
-    /**
-     * @return Formatter
-     */
-    public static function createDefaultInstance()
-    {
-        return new self(include __DIR__ . '/../../../../config/currencies.php');
     }
 
     private function loadConfig()

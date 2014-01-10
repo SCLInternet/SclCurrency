@@ -33,7 +33,7 @@ class CurrencyFactory
     public static function createDefaultInstance()
     {
         return new self(
-            include __DIR__ . '/../../../config/currencies.php',
+            Config::getDefaultConfig(),
             self::DEFAULT_DEFAULT_CURRENCY
         );
     }
