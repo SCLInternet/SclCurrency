@@ -47,11 +47,12 @@ class Accumulator
      */
     private function getTotalUnits()
     {
-        return array_sum(array_map(
-            function ($money) {
-                return $money->getUnits();
+        return array_reduce(
+            $this->monies,
+            function ($total, $money) {
+                return $total + $money->getUnits();
             },
-            $this->monies
-        ));
+            0
+        );
     }
 }
