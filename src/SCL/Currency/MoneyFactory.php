@@ -36,8 +36,6 @@ class MoneyFactory
      */
     public function createFromValue($value)
     {
-        $this->assertDefaultCurrencyIsSet();
-
         return Money::createFromValue($value, $this->getDefaultCurrency());
     }
 
@@ -48,8 +46,6 @@ class MoneyFactory
      */
     public function createFromUnits($units)
     {
-        $this->assertDefaultCurrencyIsSet();
-
         return Money::createFromUnits($units, $this->getDefaultCurrency());
     }
 
@@ -64,12 +60,5 @@ class MoneyFactory
     public function getDefaultCurrency()
     {
         return $this->currencyFactory->getDefaultCurrency();
-    }
-
-    private function assertDefaultCurrencyIsSet()
-    {
-        if (!$this->getDefaultCurrency()) {
-            throw new NoDefaultCurrencyException();
-        }
     }
 }
