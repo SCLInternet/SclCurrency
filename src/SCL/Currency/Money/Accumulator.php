@@ -18,12 +18,13 @@ class Accumulator
      */
     private $currency;
 
+    public function __construct(Currency $currency)
+    {
+        $this->currency = $currency;
+    }
+
     public function add(Money $amount)
     {
-        if (!$this->currency) {
-            $this->currency = $amount->getCurrency();
-        }
-
         if (!$amount->getCurrency()->isEqualTo($this->currency)) {
             throw new CurrencyMismatchException($amount->getCurrency()->getCode());
         }
@@ -36,10 +37,7 @@ class Accumulator
      */
     public function calculateTotal()
     {
-        // @todo This is bad! The currency returned should really be known.
-        $currency = $this->currency ?: new Currency('GBP', 2);
-
-        return Money::createFromUnits($this->getTotalUnits(), $currency);
+        return Money::createFromUnits($this->getTotalUnits(), $this->currency);
     }
 
     /**

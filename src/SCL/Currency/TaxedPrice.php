@@ -38,14 +38,28 @@ class TaxedPrice
         return $this->amount;
     }
 
+    /**
+     * @return Money
+     */
     public function getTax()
     {
         return $this->tax;
     }
 
+    /**
+     * @return Money
+     */
     public function getTotal()
     {
         return $this->getCalculator()->add($this->amount, $this->tax);
+    }
+
+    /**
+     * @return Currency
+     */
+    public function getCurrency()
+    {
+        return $this->amount->getCurrency();
     }
 
     protected function getCalculator()

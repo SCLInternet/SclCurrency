@@ -18,7 +18,7 @@ class CurrencyFactorySpec extends ObjectBehavior
             'BTC' => array(
                 'precision' => 8,
             ),
-        ));
+        ), 'BTC');
     }
 
     public function it_returns_instance_of_currency_from_create()
@@ -51,6 +51,11 @@ class CurrencyFactorySpec extends ObjectBehavior
         $this->create('GBP')->shouldReturn($currency);
     }
 
+    public function it_returns_the_default_currency()
+    {
+        $this->getDefaultCurrency()->getCode()->shouldReturn('BTC');
+    }
+
     public function it_returns_instance_from_createDefaultInstance()
     {
         $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\CurrencyFactory');
@@ -60,5 +65,12 @@ class CurrencyFactorySpec extends ObjectBehavior
     {
         // GBP is in the default config
         $this::createDefaultInstance()->create('GBP');
+    }
+
+    public function it_uses_GBP_as_default_currency_for_default_instance()
+    {
+        $factory = $this::createDefaultInstance();
+
+        $factory->getDefaultCurrency()->getCode()->shouldReturn('GBP');
     }
 }

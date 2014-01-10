@@ -10,6 +10,11 @@ use SCL\Currency\Exception\CurrencyMismatchException;
 
 class AccumulatorSpec extends ObjectBehavior
 {
+    public function let()
+    {
+        $this->beConstructedWith(new Currency('GBP', 2));
+    }
+
     public function it_sets_currency_with_single_money_object()
     {
         $this->add($this->createMoney(10));
@@ -39,15 +44,11 @@ class AccumulatorSpec extends ObjectBehavior
 
     public function it_should_throw_if_currencies_do_not_match()
     {
-        $this->add($this->createMoney(1));
-
         $this->shouldThrow(new CurrencyMismatchException('USD'))
              ->duringAdd($this->createMoney(5, 'USD'));
-
-        $this->calculateTotal();
     }
 
-    public function createMoney($units, $currency = 'GBP')
+    private function createMoney($units, $currency = 'GBP')
     {
         return new Money($units, new Currency($currency, 2));
     }

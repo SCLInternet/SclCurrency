@@ -18,10 +18,6 @@ class TaxedPriceFactory
     {
         $moneyFactory = MoneyFactory::createDefaultInstance();
 
-        $moneyFactory->setDefaultCurrency(
-            CurrencyFactory::createDefaultInstance()->create('GBP')
-        );
-
         return new self($moneyFactory);
     }
 

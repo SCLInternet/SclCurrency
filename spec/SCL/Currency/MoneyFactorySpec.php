@@ -5,10 +5,19 @@ namespace spec\SCL\Currency;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use SCL\Currency\Currency;
-use SCL\Currency\Exception\NoDefaultCurrencyException;
+use SCL\Currency\CurrencyFactory;
 
 class MoneyFactorySpec extends ObjectBehavior
 {
+    private $currencyFactory;
+
+    public function let(CurrencyFactory $currencyFactory)
+    {
+        $this->currencyFactory = $currencyFactory;
+
+        $this->beConstructedWith($currencyFactory);
+    }
+
     /*
      * createFromValue()
      */
@@ -48,12 +57,6 @@ class MoneyFactorySpec extends ObjectBehavior
         $this->createFromValue(0)->getCurrency()->shouldReturn($currency);
     }
 
-    public function it_should_throw_from_createFromValue_if_default_currency_not_set()
-    {
-        $this->shouldThrow(new NoDefaultCurrencyException())
-             ->duringCreateFromValue(0);
-    }
-
     /*
      * createFromUnits()
      */
@@ -82,12 +85,6 @@ class MoneyFactorySpec extends ObjectBehavior
         $this->createFromUnits(0)->getCurrency()->shouldReturn($currency);
     }
 
-    public function it_should_throw_from_createFromUnits_if_default_currency_not_set()
-    {
-        $this->shouldThrow(new NoDefaultCurrencyException())
-             ->duringCreateFromUnits(0);
-    }
-
     /*
      * getDefaultCurrency()
      */
@@ -108,5 +105,14 @@ class MoneyFactorySpec extends ObjectBehavior
     public function it_returns_instance_from_createDefaultInstance()
     {
         $this::createDefaultInstance()->shouldReturnAnInstanceOf('SCL\Currency\MoneyFactory');
+    }
+
+    /*
+     * private methods
+     */
+
+    private function setDefaultCurrency(Currency $currency)
+    {
+        $this->currencyFactory->getDefaultCurrency()->willReturn($currency);
     }
 }

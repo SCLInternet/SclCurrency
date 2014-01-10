@@ -7,15 +7,50 @@ use SCL\Currency\Factory\AbstractFactoryFacade;
 
 class CurrencyFactory
 {
+    /**
+     * @todo Move this to confuration.
+     */
+    const DEFAULT_DEFAULT_CURRENCY = 'GBP';
+
+    /**
+     * @var array
+     */
     private $config;
 
+    /**
+     * @var Currency[]
+     */
     private $currencies = array();
 
-    public function __construct($config)
+    /**
+     * @var string
+     */
+    private $defaultCurrencyCode;
+
+    /**
+     * @return Factory
+     */
+    public static function createDefaultInstance()
     {
-        $this->config = $config;
+        return new self(
+            include __DIR__ . '/../../../config/currencies.php',
+            self::DEFAULT_DEFAULT_CURRENCY
+        );
     }
 
+    /**
+     * @param array  $config
+     * @param string $defaultCurrencyCode
+     */
+    public function __construct(array $config, $defaultCurrencyCode)
+    {
+        $this->config              = $config;
+        $this->defaultCurrencyCode = (string) $defaultCurrencyCode;
+    }
+
+    /**
+     * @return Currency
+     */
     public function create($code)
     {
         if (!array_key_exists($code, $this->currencies)) {
@@ -29,20 +64,21 @@ class CurrencyFactory
         return $this->currencies[$code];
     }
 
+    /**
+     * @return Currency
+     */
+    public function getDefaultCurrency()
+    {
+        return $this->create($this->defaultCurrencyCode);
+    }
+
+    /**
+     * @throws UnknownCurrencyException
+     */
     private function assertCurrencyExists($code)
     {
         if (!array_key_exists($code, $this->config)) {
             throw new UnknownCurrencyException($code);
         }
-    }
-
-    /**
-     * @return Factory
-     */
-    public static function createDefaultInstance()
-    {
-        return new self(
-            include __DIR__ . '/../../../config/currencies.php'
-        );
     }
 }

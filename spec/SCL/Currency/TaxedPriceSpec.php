@@ -49,4 +49,9 @@ class TaxedPriceSpec extends ObjectBehavior
     {
         $this->getTotal()->shouldBeLike(new Money(12, $this->currency));
     }
+
+    public function it_returns_currency()
+    {
+        $this->getCurrency()->shouldReturn($this->currency);
+    }
 }

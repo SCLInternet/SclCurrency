@@ -7,20 +7,26 @@ use SCL\Currency\Money\ConfigFactory;
 use SCL\Currency\Factory\AbstractFactoryFacade;
 use SCL\Currency\Currency;
 use SCL\Currency\Exception\NoDefaultCurrencyException;
+use SCL\Currency\CurrencyFactory;
 
 class MoneyFactory
 {
     /**
-     * @var Currency
+     * @var CurrencyFactory
      */
-    private $defaultCurrency;
+    private $currencyFactory;
 
     /**
      * @return MoneyFactory
      */
     public static function createDefaultInstance()
     {
-        return new self();
+        return new self(CurrencyFactory::createDefaultInstance());
+    }
+
+    public function __construct(CurrencyFactory $currencyFactory)
+    {
+        $this->currencyFactory = $currencyFactory;
     }
 
     /**
@@ -32,7 +38,7 @@ class MoneyFactory
     {
         $this->assertDefaultCurrencyIsSet();
 
-        return Money::createFromValue($value, $this->defaultCurrency);
+        return Money::createFromValue($value, $this->getDefaultCurrency());
     }
 
     /**
@@ -44,7 +50,7 @@ class MoneyFactory
     {
         $this->assertDefaultCurrencyIsSet();
 
-        return Money::createFromUnits($units, $this->defaultCurrency);
+        return Money::createFromUnits($units, $this->getDefaultCurrency());
     }
 
     public function setDefaultCurrency(Currency $currency)
@@ -57,12 +63,12 @@ class MoneyFactory
      */
     public function getDefaultCurrency()
     {
-        return $this->defaultCurrency;
+        return $this->currencyFactory->getDefaultCurrency();
     }
 
     private function assertDefaultCurrencyIsSet()
     {
-        if (!$this->defaultCurrency) {
+        if (!$this->getDefaultCurrency()) {
             throw new NoDefaultCurrencyException();
         }
     }
