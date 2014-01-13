@@ -97,15 +97,6 @@ class Formatter
     }
 
     /**
-     * @return string
-     */
-    private function getCurrencySymbol()
-    {
-
-        return $this->config['symbol_ascii'];
-    }
-
-    /**
      * @return int
      */
     private function getPrecision()
