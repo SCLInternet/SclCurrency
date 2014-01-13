@@ -2,12 +2,18 @@
 
 namespace SCL\Currency\Money;
 
-use SCL\Currency\Money;
-use SCL\Currency\Exception\UnknownCurrencyException;
 use SCL\Currency\Config;
+use SCL\Currency\Exception\UnknownCurrencyException;
+use SCL\Currency\Money;
+use SCL\Currency\Money\Formatter\FormatterContext;
 
 class Formatter
 {
+    /**
+     * @var FormatterContext
+     */
+    private $context;
+
     /**
      * @var array
      */
@@ -26,45 +32,26 @@ class Formatter
     /**
      * @return Formatter
      */
-    public static function createDefaultInstance()
+    public static function createDefaultInstance(FormatterContext $context)
     {
-        return new self(Config::getDefaultConfig());
+        return new self(Config::getDefaultConfig(), $context);
     }
 
-    public function __construct(array $currencies)
+    public function __construct(array $currencies, FormatterContext $context)
     {
         $this->currencies = $currencies;
+        $this->context    = $context;
     }
 
-    /**
-     * @return float
-     */
-    public function formatAsNumber(Money $value)
+    public function format(Money $value)
     {
         $this->value = $value;
 
         $this->loadConfig();
 
-        return $this->getValueAsDecimalNumber();
-    }
+        $result = $this->getFormattedMoneyValue();
 
-
-    public function formatAsString(Money $value)
-    {
-        $this->value = $value;
-
-        $this->loadConfig();
-
-        $result = sprintf(
-            '%.' . $this->getPrecision() . 'f',
-            $value->getValue()
-        );
-
-        if ($this->config['symbol_position'] === 'left') {
-            $result = $this->config['symbol_ascii'] . ' ' . $result;
-        } else {
-            $result .= ' ' . $this->config['symbol_ascii'];
-        }
+        $result = $this->addCurrencySymbol($result);
 
         return $result;
     }
@@ -81,15 +68,48 @@ class Formatter
     }
 
     /**
-     * @return float
+     * @return string
      */
-    private function getValueAsDecimalNumber()
+    private function getFormattedMoneyValue()
     {
-        return floatval($this->value->getValue() / pow(10, $this->getPrecision()));
+        return sprintf(
+            '%.' . $this->getPrecision() . 'f',
+            $this->value->getValue()
+        );
     }
 
+    /**
+     * @param string $result
+     *
+     * @return string
+     */
+    private function addCurrencySymbol($result)
+    {
+        $format = ($this->config['symbol_position'] === 'left')
+            ? '%1$s %2$s'
+            : '%2$s %1$s';
+
+        return sprintf(
+            $format,
+            $this->context->getCurrencySymbol($this->config),
+            $result
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getCurrencySymbol()
+    {
+
+        return $this->config['symbol_ascii'];
+    }
+
+    /**
+     * @return int
+     */
     private function getPrecision()
     {
-        return $this->config['precision'];
+        return $this->value->getCurrency()->getPrecision();
     }
 }
