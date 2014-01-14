@@ -4,6 +4,8 @@ namespace spec\SCL\Currency;
 
 use PhpSpec\ObjectBehavior; use Prophecy\Argument;
 use SCL\Currency\Currency;
+use SCL\Currency\Money;
+use SCL\Currency\Exception\CurrencyMismatchException;
 
 class MoneySpec extends ObjectBehavior
 {
@@ -33,6 +35,58 @@ class MoneySpec extends ObjectBehavior
     public function it_returns_value()
     {
         $this->getValue()->shouldReturn(11.99);
+    }
+
+    public function it_is_not_zero_for_values_other_than_0()
+    {
+        $this->shouldNotBeZero();
+    }
+
+    public function it_is_zero_for_value_of_0()
+    {
+        $this->beConstructedWith(0, $this->currency);
+
+        $this->shouldBeZero();
+    }
+
+    public function it_is_not_equal_if_currencies_are_not_equal()
+    {
+        $other = Money::createFromUnits(1199, new Currency('USD', 2));
+
+        $this->isEqualTo($other)->shouldReturn(false);
+    }
+
+    public function it_is_equal_if_currencies_and_amounts_match()
+    {
+        $other = Money::createFromUnits(1199, $this->currency);
+
+        $this->isEqualTo($other)->shouldReturn(true);
+        //$this->shouldBeEqualTo($other);
+    }
+
+    public function it_is_not_equal_if_amounts_are_not_equal()
+    {
+        $other = Money::createFromUnits(1100, $this->currency);
+
+        $this->isEqualTo($other)->shouldReturn(false);
+    }
+
+    public function it_throws_from_isGreaterThan_if_currencies_mismatch()
+    {
+        $this->shouldThrow(new CurrencyMismatchException('USD'))
+             ->duringIsGreaterThan(new Money(10, new Currency('USD', 2)));
+    }
+
+    public function it_is_greater_than_a_money_value_with_a_smaller_value()
+    {
+        $this->isGreaterThan(Money::createFromUnits(1000, $this->currency))
+             ->shouldReturn(true);
+    }
+
+    public function it_isnt_greater_than_a_money_value_with_a_greater_value()
+    {
+        $this->isGreaterThan(Money::createFromUnits(1200, $this->currency))
+             ->shouldReturn(false);
     }
 
     public function it_throws_when_constructed_with_floating_point_units()

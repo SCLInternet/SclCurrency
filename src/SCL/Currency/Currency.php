@@ -71,9 +71,7 @@ class Currency
      */
     public function isEqualTo(Currency $other)
     {
-        $result = $this->code === $other->getCode();
-
-        if ($result && !$this->hasSamePrecision($other)) {
+        if (!$this->hasSamePrecision($other)) {
             throw PrecisionMismatchException::create(
                 $this->code,
                 $this->precision,
@@ -81,7 +79,7 @@ class Currency
             );
         }
 
-        return $result;
+        return $this->code === $other->getCode();
     }
 
     /**

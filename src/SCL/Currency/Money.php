@@ -2,6 +2,8 @@
 
 namespace SCL\Currency;
 
+use SCL\Currency\Exception\CurrencyMismatchException;
+
 class Money
 {
     /**
@@ -77,5 +79,34 @@ class Money
     public function isSameCurrency(Currency $currency)
     {
         return $this->currency->isEqualTo($currency);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isZero()
+    {
+        return $this->units === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEqualTo(Money $other)
+    {
+        if (!$other->isSameCurrency($this->currency)) {
+            return false;
+        }
+
+        return $this->units === $other->getUnits();
+    }
+
+    public function isGreaterThan(Money $other)
+    {
+        if (!$other->isSameCurrency($this->currency)) {
+            throw new CurrencyMismatchException($other->getCurrency()->getCode());
+        }
+
+        return $this->units > $other->getUnits();
     }
 }
